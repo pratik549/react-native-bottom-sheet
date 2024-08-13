@@ -15,7 +15,7 @@ import Animated, {
   Extrapolation,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { useBottomSheet } from '../../hooks';
+import { useBottomSheet, useKeyboardDismissHandler } from '../../hooks';
 import {
   DEFAULT_OPACITY,
   DEFAULT_APPEARS_ON_INDEX,
@@ -66,7 +66,7 @@ const BottomSheetBackdropComponent = ({
   //#endregion
 
   //#region callbacks
-  const handleOnPress = useCallback(() => {
+  const handleOnPress = useCallback(useKeyboardDismissHandler(() => {
     onPress?.();
 
     if (pressBehavior === 'close') {
@@ -76,7 +76,8 @@ const BottomSheetBackdropComponent = ({
     } else if (typeof pressBehavior === 'number') {
       snapToIndex(pressBehavior);
     }
-  }, [snapToIndex, close, disappearsOnIndex, pressBehavior, onPress]);
+  }, 'keyboardWillHide'), [snapToIndex, close, disappearsOnIndex, pressBehavior, onPress]);
+  
   const handleContainerTouchability = useCallback(
     (shouldDisableTouchability: boolean) => {
       isMounted.current &&
