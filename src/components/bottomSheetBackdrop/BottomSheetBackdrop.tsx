@@ -54,18 +54,19 @@ const BottomSheetBackdropComponent = ({
   //#endregion
 
   //#region callbacks
-  const handleOnPress = useCallback(useKeyboardDismissHandler(() => {
-    onPress?.();
+  const handleOnPress = useKeyboardDismissHandler(
+    useCallback(() => {
+      onPress?.();
 
-    if (pressBehavior === 'close') {
-      close();
-    } else if (pressBehavior === 'collapse') {
-      snapToIndex(disappearsOnIndex as number);
-    } else if (typeof pressBehavior === 'number') {
-      snapToIndex(pressBehavior);
-    }
-  }, 'keyboardWillHide'), [snapToIndex, close, disappearsOnIndex, pressBehavior, onPress]);
-  
+      if (pressBehavior === 'close') {
+        close();
+      } else if (pressBehavior === 'collapse') {
+        snapToIndex(disappearsOnIndex as number);
+      } else if (typeof pressBehavior === 'number') {
+        snapToIndex(pressBehavior);
+      }
+    }, [snapToIndex, close, disappearsOnIndex, pressBehavior, onPress])
+  );
   const handleContainerTouchability = useCallback(
     (shouldDisableTouchability: boolean) => {
       setPointerEvents(shouldDisableTouchability ? 'none' : 'auto');
@@ -126,7 +127,7 @@ const BottomSheetBackdropComponent = ({
         accessibilityHint={`Tap to ${
           typeof pressBehavior === 'string' ? pressBehavior : 'move'
         } the Bottom Sheet`}
-      >
+        >
         {children}
       </Animated.View>
     </TapGestureHandler>
